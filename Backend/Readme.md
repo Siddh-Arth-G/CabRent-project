@@ -288,3 +288,182 @@ If any validation rule fails, the endpoint returns a 400 status code with detail
 }
 ```
 
+
+
+
+## /users/profile and /users/logout Endpoint Documentation
+
+### /users/profile Endpoint
+
+#### Endpoint Description
+The `/users/profile` endpoint is used to fetch the authenticated user's profile details. The request must include a valid authentication token.
+
+---
+
+#### HTTP Method
+`GET`
+
+---
+
+#### Endpoint URL
+`/users/profile`
+
+---
+
+#### Headers
+1. **Authorization**
+   - Format: `Bearer <token>`
+   - Required.
+
+---
+
+#### Response
+##### Success Response
+- **Status Code:** `200 OK`
+- **Response Body:**
+
+```json
+{
+    "_id": "<USER_ID>",
+    "fullname": {
+        "firstname": "<FIRST_NAME>",
+        "lastname": "<LAST_NAME>"
+    },
+    "email": "<EMAIL>",
+    "socketId": null
+}
+```
+
+##### Error Responses
+1. **Unauthorized**
+   - **Status Code:** `401 Unauthorized`
+   - **Response Body:**
+
+   ```json
+   {
+       "message": "Unauthorized"
+   }
+   ```
+
+2. **Internal Server Error**
+   - **Status Code:** `500 Internal Server Error`
+   - **Response Body:**
+
+   ```json
+   {
+       "error": "Something went wrong. Please try again later."
+   }
+   ```
+
+---
+
+### Example Usage
+
+#### Request
+**GET** `/users/profile`
+
+**Headers:**
+```json
+{
+    "Authorization": "Bearer <token>"
+}
+```
+
+##### Successful Response
+**Status Code:** `200 OK`
+
+**Response Body:**
+```json
+{
+    "_id": "64abf3c72c8c0e0012ef9b78",
+    "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "socketId": null
+}
+```
+
+---
+
+### /users/logout Endpoint
+
+#### Endpoint Description
+The `/users/logout` endpoint is used to log out an authenticated user by clearing the token and blacklisting it to prevent further use.
+
+---
+
+#### HTTP Method
+`GET`
+
+---
+
+#### Endpoint URL
+`/users/logout`
+
+---
+
+#### Headers
+1. **Authorization**
+   - Format: `Bearer <token>`
+   - Required.
+
+---
+
+#### Response
+##### Success Response
+- **Status Code:** `200 OK`
+- **Response Body:**
+
+```json
+{
+    "message": "Logged Out"
+}
+```
+
+##### Error Responses
+1. **Unauthorized**
+   - **Status Code:** `401 Unauthorized`
+   - **Response Body:**
+
+   ```json
+   {
+       "message": "Unauthorized"
+   }
+   ```
+
+2. **Internal Server Error**
+   - **Status Code:** `500 Internal Server Error`
+   - **Response Body:**
+
+   ```json
+   {
+       "error": "Something went wrong. Please try again later."
+   }
+   ```
+
+---
+
+### Example Usage
+
+#### Request
+**GET** `/users/logout`
+
+**Headers:**
+```json
+{
+    "Authorization": "Bearer <token>"
+}
+```
+
+##### Successful Response
+**Status Code:** `200 OK`
+
+**Response Body:**
+```json
+{
+    "message": "Logged Out"
+}
+```
+
