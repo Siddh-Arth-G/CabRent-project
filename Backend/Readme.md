@@ -467,3 +467,132 @@ The `/users/logout` endpoint is used to log out an authenticated user by clearin
 }
 ```
 
+
+
+
+
+## /captain/register Endpoint Documentation
+
+### Overview
+The `/captain/register` endpoint allows the registration of new captains in the system. Captains must provide their personal details, vehicle information, and credentials to register successfully.
+
+---
+
+### Endpoint
+**POST** `/captain/register`
+
+---
+
+### Request Body
+The request body should be in JSON format and include the following fields:
+
+#### Required Fields
+
+- **fullname** (object)
+  - **firstname** (string, required): The first name of the captain. Must be at least 3 characters long.
+  - **lastname** (string, optional): The last name of the captain. Must be at least 3 characters long.
+
+- **email** (string, required): A valid email address. Must be unique.
+
+- **password** (string, required): The password for the captain's account. Must be at least 6 characters long.
+
+- **vehicle** (object, required): Details of the captain's vehicle.
+  - **color** (string, required): The color of the vehicle. Must be at least 3 characters long.
+  - **plate** (string, required): The license plate number of the vehicle. Must be at least 3 characters long.
+  - **capacity** (number, required): The seating or load capacity of the vehicle. Must be at least 1.
+  - **vehicleType** (string, required): The type of the vehicle. Must be one of `car`, `motorcycle`, or `auto`.
+
+---
+
+### Example Request
+
+#### Request Body
+```json
+{
+    "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "password": "securepassword",
+    "vehicle": {
+        "color": "Blue",
+        "plate": "XYZ123",
+        "capacity": 4,
+        "vehicleType": "car"
+    }
+}
+```
+
+---
+
+### Response
+
+#### Success
+If the captain is successfully registered, the API will return:
+
+- **Status Code**: `201 Created`
+- **Response Body**:
+
+```json
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "captain": {
+        "_id": "64a7b2c9f1234567890abcdef",
+        "fullname": {
+            "firstname": "John",
+            "lastname": "Doe"
+        },
+        "email": "john.doe@example.com",
+        "status": "inactive",
+        "vehicle": {
+            "color": "Blue",
+            "plate": "XYZ123",
+            "capacity": 4,
+            "vehicleType": "car"
+        },
+        "location": {
+            "lat": null,
+            "lng": null
+        },
+        "createdAt": "2024-12-21T10:30:00Z",
+        "updatedAt": "2024-12-21T10:30:00Z",
+        "__v": 0
+    }
+}
+```
+
+#### Validation Errors
+If validation fails:
+
+- **Status Code**: `400 Bad Request`
+- **Response Body**:
+
+```json
+{
+    "errors": [
+        {
+            "msg": "First Name must be of at least 3 characters long",
+            "param": "fullname.firstname",
+            "location": "body"
+        },
+        {
+            "msg": "Invalid Email",
+            "param": "email",
+            "location": "body"
+        }
+    ]
+}
+```
+
+#### Duplicate Email
+If a captain with the provided email already exists:
+
+- **Status Code**: `400 Bad Request`
+- **Response Body**:
+
+```json
+{
+    "message": "Captain already exists"
+}
+```
