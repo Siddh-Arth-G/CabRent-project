@@ -596,3 +596,191 @@ If a captain with the provided email already exists:
     "message": "Captain already exists"
 }
 ```
+
+
+
+### Endpoint `/captain/login`
+
+#### Description
+This endpoint allows captains to log in to their account using their registered email and password.
+
+#### Method
+**POST** `/captain/login`
+
+#### Request Body
+The request body should be in JSON format and include:
+
+- **email** (string, required): The registered email address of the captain.
+- **password** (string, required): The account password. Must be at least 6 characters long.
+
+#### Example Request
+```json
+{
+    "email": "john.doe@example.com",
+    "password": "securepassword"
+}
+```
+
+#### Success Response
+- **Status Code**: `200 OK`
+- **Response Body**:
+
+```json
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "captain": {
+        "_id": "64a7b2c9f1234567890abcdef",
+        "fullname": {
+            "firstname": "John",
+            "lastname": "Doe"
+        },
+        "email": "john.doe@example.com",
+        "status": "inactive",
+        "vehicle": {
+            "color": "Blue",
+            "plate": "XYZ123",
+            "capacity": 4,
+            "vehicleType": "car"
+        },
+        "location": {
+            "lat": null,
+            "lng": null
+        },
+        "createdAt": "2024-12-21T10:30:00Z",
+        "updatedAt": "2024-12-21T10:30:00Z",
+        "__v": 0
+    }
+}
+```
+
+#### Validation Errors
+- **Status Code**: `400 Bad Request`
+- **Response Body**:
+
+```json
+{
+    "errors": [
+        {
+            "msg": "Invalid Email",
+            "param": "email",
+            "location": "body"
+        },
+        {
+            "msg": "Password must be of at least 6 character long",
+            "param": "password",
+            "location": "body"
+        }
+    ]
+}
+```
+
+#### Authentication Errors
+- **Status Code**: `401 Unauthorized`
+- **Response Body**:
+
+```json
+{
+    "message": "Invalid email or password"
+}
+```
+
+---
+
+### Endpoint `/captain/profile`
+
+#### Description
+This endpoint retrieves the profile of the authenticated captain.
+
+#### Method
+**GET** `/captain/profile`
+
+#### Authentication
+Requires the `Authorization` header with a valid token.
+
+#### Example Request
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+#### Success Response
+- **Status Code**: `200 OK`
+- **Response Body**:
+
+```json
+{
+    "captain": {
+        "_id": "64a7b2c9f1234567890abcdef",
+        "fullname": {
+            "firstname": "John",
+            "lastname": "Doe"
+        },
+        "email": "john.doe@example.com",
+        "status": "inactive",
+        "vehicle": {
+            "color": "Blue",
+            "plate": "XYZ123",
+            "capacity": 4,
+            "vehicleType": "car"
+        },
+        "location": {
+            "lat": null,
+            "lng": null
+        },
+        "createdAt": "2024-12-21T10:30:00Z",
+        "updatedAt": "2024-12-21T10:30:00Z",
+        "__v": 0
+    }
+}
+```
+
+#### Authentication Errors
+- **Status Code**: `401 Unauthorized`
+- **Response Body**:
+
+```json
+{
+    "message": "Unauthorized"
+}
+```
+
+---
+
+### Endpoint `/captain/logout`
+
+#### Description
+This endpoint logs out the authenticated captain by invalidating their token.
+
+#### Method
+**GET** `/captain/logout`
+
+#### Authentication
+Requires the `Authorization` header with a valid token.
+
+#### Example Request
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+#### Success Response
+- **Status Code**: `200 OK`
+- **Response Body**:
+
+```json
+{
+    "message": "Logout successfully"
+}
+```
+
+#### Authentication Errors
+- **Status Code**: `401 Unauthorized`
+- **Response Body**:
+
+```json
+{
+    "message": "Unauthorized"
+}
+```
+
+---
