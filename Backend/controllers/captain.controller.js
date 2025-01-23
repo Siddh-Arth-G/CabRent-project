@@ -70,13 +70,36 @@ module.exports.getCaptainProfile = async(req, res, next) => {
     res.status(200).json({captain: req.captain});
 }
 
+// module.exports.logoutCaptain = async(req, res, next) => {
+//     const token = req.cookies.token || req.headers.authorization?.split(' ')[ 1 ];
+
+//     await blacklistTokenModel.create({token});
+
+//     res.clearCookie('token');
+
+//     res.status(200).json({message: 'Logout successfully'});
+
+// }
+
 module.exports.logoutCaptain = async(req, res, next) => {
-    const token = req.cookies.token || req.headers.authorization?.split(' ')[ 1 ];
-
-    await blacklistTokenModel.create({token});
-
-    res.clearCookie('token');
-
-    res.status(200).json({message: 'Logout successfully'});
-
+    const token =
+        req.cookies.token ||
+        (req.headers.authorization && req.headers.authorization.split(" ")[1]);
+    
+      if (!token) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+    
+      const isBlackListed = await blacklistTokenModel.findOne({ token });
+      if (isBlackListed) {
+        // Clear the cookie and respond even if the token is already blacklisted
+        res.clearCookie("token");
+        return res.status(200).json({ message: "Already logged out" });
+      }
+      
+      // Insert the token into the blacklist
+      await blacklistTokenModel.create({ token });
+    
+      res.clearCookie("token");
+      res.status(200).json({ message: "Logged Out" });
 }

@@ -18,7 +18,7 @@ app.use(cookieParser());
 
 
 app.get('/', (req, res) => {
-    res.send('Hello user! Uber is ready to go.');
+    res.send('Hello user! Cab-Rent is ready to go.');
 });
 
 app.use('/users', userRoutes);
